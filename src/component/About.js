@@ -88,7 +88,19 @@ const AboutUs = () => {
           </div>
         ))}
       </div>
+
+      <div className="website-info">
+      <h2 className="website-title">Our Vision: <span className="highlight">KHOJ (Search)</span></h2>
+      <p className="website-description">
+        <strong>KHOJ</strong>, meaning "<em>search</em>," simplifies reconnecting lost items with their rightful owners.
+        We aim to provide a centralized and accessible platform for lost and found belongings.
+      </p>
+      <p className="website-description">
+        Our goal is to foster peace of mind by building a supportive community that helps return lost items
+        to where they belong — quickly and securely.
+      </p>
     </div>
+  </div>
   );
 };
 

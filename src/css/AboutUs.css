@@ -57,3 +57,50 @@
   color: #666;
   font-size: 14px;
 }
+
+.social-links {
+  margin-top: 10px;
+}
+
+.social-links a {
+  color: #333;
+  margin: 0 6px;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #2563eb;
+}
+
+/* Vision Section */
+
+.website-info {
+  background-color: #ffffff;
+  margin-top: 50px;
+  padding: 40px 30px;
+  border-radius: 15px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.website-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.website-title .highlight {
+  color: #2563eb;
+}
+
+.website-description {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
