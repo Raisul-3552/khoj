@@ -9,10 +9,10 @@ const developers = [
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev1.jpg',
     social: {
-      gmail: 'mailto:ratul@gmail.com',
-      facebook: 'https://facebook.com/ratul.fb',
+      gmail: 'https://mail.google.com/mail/?view=cm&to=kaziishmamulhaque@gmail.com',
+      facebook: 'https://www.facebook.com/raisul.ratul.56',
       twitter: 'https://twitter.com/ratul',
-      github: 'https://github.com/ratul-git',
+      github: 'https://github.com/Raisul-3552',
       linkedin: 'https://linkedin.com/in/ratul-linkedin',
     }
   },
@@ -22,23 +22,23 @@ const developers = [
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev2.jpg',
     social: {
-      gmail: 'mailto:kazi@gmail.com',
-      facebook: 'https://facebook.com/kazi.fb',
-      twitter: 'https://twitter.com/kazi',
-      github: 'https://github.com/kaziishmamul',
-      linkedin: 'https://linkedin.com/in/kaziishmamul',
+      gmail: 'https://mail.google.com/mail/?view=cm&to=kaziishmamulhaque@gmail.com',
+      facebook: 'https://www.facebook.com/kazi.ishmamulhaque.1/',
+      twitter: 'https://x.com/KaziIshmamul',
+      github: 'https://github.com/Kazi-Ishmamul',
+      linkedin: 'https://www.linkedin.com/in/kazi-ishmamul-haque-a52067372/',
     }
   },
   {
     name: 'Faiyaz Fardin',
     role: 'Developer',
     description: 'Ahsanullah University Of Science & Technology',
-    image: '/images/dev3.jpg',
+    image: '/images/dev31.jpg',
     social: {
-      gmail: 'mailto:faiyaz@gmail.com',
-      facebook: 'https://facebook.com/faiyaz.fb',
+      gmail: 'https://mail.google.com/mail/?view=cm&to=kaziishmamulhaque@gmail.com',
+      facebook: 'https://www.facebook.com/faiyaz.fardin.464176',
       twitter: 'https://twitter.com/faiyaz',
-      github: 'https://github.com/faiyazf',
+      github: 'https://github.com/faiyazfardin',
       linkedin: 'https://linkedin.com/in/faiyazf',
     }
   },
@@ -48,8 +48,8 @@ const developers = [
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev4.jpg',
     social: {
-      gmail: 'mailto:ashraful@gmail.com',
-      facebook: 'https://facebook.com/ashraful.fb',
+      gmail: 'https://mail.google.com/mail/?view=cm&to=kaziishmamulhaque@gmail.com',
+      facebook: 'https://www.facebook.com/ashraful.ash.566',
       twitter: 'https://twitter.com/ashraful',
       github: 'https://github.com/ashrafuldev',
       linkedin: 'https://linkedin.com/in/ashrafuldev',
