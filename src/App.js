@@ -1,4 +1,5 @@
 import React from 'react';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -11,6 +12,7 @@ import {
 import Navbar from './component/Navbar';
 import Home from './component/Home';
 import About from './component/About';
+import Registration from './component/Registration'; 
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Registration />} />
         </Routes>
       </div>
     </Router>
