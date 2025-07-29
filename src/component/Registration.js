@@ -5,6 +5,8 @@ const Registration = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    address: '',
     password: '',
     confirmPassword: ''
   });
@@ -27,6 +29,15 @@ const Registration = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\d{10,15}$/.test(formData.phone)) {
+      newErrors.phone = 'Phone number is invalid';
+    }
+
+    if (!formData.address.trim()) newErrors.address = 'Address is required';
+
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = 'Passwords do not match';
@@ -44,19 +55,23 @@ const Registration = () => {
     }
 
     alert('Registration successful!');
-    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    setFormData({
+      name: '', email: '', phone: '', address: '',
+      password: '', confirmPassword: ''
+    });
     setErrors({});
   };
 
   return (
-    <div className={styles['registration-page']}> 
+    <div className={styles['registration-page']}>
       <div className="container mt-5" style={{ maxWidth: '400px' }}>
         <h2>Register</h2>
         <form onSubmit={handleSubmit} noValidate>
+          {/* Name */}
           <div className="mb-3">
             <label className="form-label">Name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               className={`form-control ${errors.name ? 'is-invalid' : ''}`}
               name="name"
               value={formData.name}
@@ -65,10 +80,11 @@ const Registration = () => {
             {errors.name && <div className="invalid-feedback">{errors.name}</div>}
           </div>
 
+          {/* Email */}
           <div className="mb-3">
             <label className="form-label">Email</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               className={`form-control ${errors.email ? 'is-invalid' : ''}`}
               name="email"
               value={formData.email}
@@ -76,11 +92,37 @@ const Registration = () => {
             />
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
+          {/* Phone Number */}
+         <div className="mb-3">
+  <label className="form-label">Phone Number</label>
+  <input
+    type="text"
+    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+    name="phone"
+    value={formData.phone}
+    onChange={handleChange}
+  />
+  {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
+</div>
 
+          {/* Address */} 
+        <div className="mb-3">
+      <label className="form-label">Address</label>
+    <textarea
+    className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+    name="address"
+    value={formData.address}
+    onChange={handleChange}
+  />
+  {errors.address && <div className="invalid-feedback">{errors.address}</div>}
+</div>
+
+
+          {/* Password */}
           <div className="mb-3">
             <label className="form-label">Password</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               className={`form-control ${errors.password ? 'is-invalid' : ''}`}
               name="password"
               value={formData.password}
@@ -89,10 +131,11 @@ const Registration = () => {
             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
 
+          {/* Confirm Password */}
           <div className="mb-3">
             <label className="form-label">Confirm Password</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
               name="confirmPassword"
               value={formData.confirmPassword}
