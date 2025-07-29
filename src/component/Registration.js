@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../css/Registration.module.css';  // Make sure this path is correct
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -42,66 +43,67 @@ const Registration = () => {
       return;
     }
 
-    // For now, just alert or save to localStorage
     alert('Registration successful!');
     setFormData({ name: '', email: '', password: '', confirmPassword: '' });
     setErrors({});
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: '400px' }}>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="mb-3">
-          <label className="form-label">Name</label>
-          <input 
-            type="text" 
-            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-        </div>
+    <div className={styles['registration-page']}> 
+      <div className="container mt-5" style={{ maxWidth: '400px' }}>
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="mb-3">
+            <label className="form-label">Name</label>
+            <input 
+              type="text" 
+              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input 
-            type="email" 
-            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-        </div>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input 
+              type="email" 
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input 
-            type="password" 
-            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-        </div>
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input 
+              type="password" 
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label">Confirm Password</label>
-          <input 
-            type="password" 
-            className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-          />
-          {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
-        </div>
+          <div className="mb-3">
+            <label className="form-label">Confirm Password</label>
+            <input 
+              type="password" 
+              className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+          </div>
 
-        <button type="submit" className="btn btn-success w-100">Register</button>
-      </form>
+          <button type="submit" className="btn btn-success w-100">Register</button>
+        </form>
+      </div>
     </div>
   );
 };
