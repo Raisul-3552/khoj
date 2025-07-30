@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 const developers = [
   {
     name: 'A. B. M. Raisul Hasan Ratul',
-    role: 'Developer',
+    role: 'Student',
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev1.jpg',
     social: {
@@ -18,7 +18,7 @@ const developers = [
   },
   {
     name: 'Kazi Ishmamul Haque',
-    role: 'Developer',
+    role: 'Student',
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev2.jpg',
     social: {
@@ -31,7 +31,7 @@ const developers = [
   },
   {
     name: 'Faiyaz Fardin',
-    role: 'Developer',
+    role: 'Student',
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev31.jpg',
     social: {
@@ -44,7 +44,7 @@ const developers = [
   },
   {
     name: 'Ashraful Hasan',
-    role: 'Developer',
+    role: 'Student',
     description: 'Ahsanullah University Of Science & Technology',
     image: '/images/dev4.jpg',
     social: {
