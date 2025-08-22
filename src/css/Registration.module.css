@@ -1,6 +1,6 @@
 /* Background */
 .registration-page {
-  background: linear-gradient(135deg, #ffecd2, #fcb69f); /* soft gradient */
+  background: #f4f4f9; /* soft neutral light background */
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -13,23 +13,20 @@
 .container {
   background-color: #ffffff;
   padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
   transition: transform 0.2s ease;
-}
-
-.container:hover {
-  transform: translateY(-3px);
 }
 
 /* Title */
 .container h2 {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #333333;
+  color: #222;
   font-weight: 600;
+  font-size: 1.6rem;
 }
 
 /* Input Fields */
@@ -42,16 +39,16 @@ form textarea {
   height: 42px;
   font-size: 0.95rem;
   padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   width: 100%;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 form input:focus,
 form textarea:focus {
-  border-color: #4caf50;
-  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+  border-color: #007bff; /* professional blue */
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.25);
   outline: none;
 }
 
@@ -69,9 +66,9 @@ textarea {
 
 /* Submit Button */
 button[type="submit"] {
-  background: linear-gradient(90deg, #43cea2, #185a9d);
+  background-color: #007bff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #fff;
   font-size: 1rem;
   padding: 10px;
@@ -80,6 +77,41 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background: linear-gradient(90deg, #36d1dc, #5b86e5);
-  transform: translateY(-2px);
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+/* Back Button */
+button.back-button {
+  background-color: #6c757d;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button.back-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* Optional: Responsive */
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 1.8rem;
+  }
+  form input,
+  form textarea {
+    font-size: 0.9rem;
+    height: 38px;
+  }
+  button[type="submit"],
+  button.back-button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
 }

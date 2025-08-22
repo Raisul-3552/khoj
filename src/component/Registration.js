@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import styles from '../css/Registration.module.css';  // Make sure this path is correct
+import { useNavigate } from 'react-router-dom';
+import styles from '../css/Registration.module.css';
 
 const Registration = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,32 +25,26 @@ const Registration = () => {
 
   const validate = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     } else if (!/^\d{10,15}$/.test(formData.phone)) {
       newErrors.phone = 'Phone number is invalid';
     }
-
     if (!formData.address.trim()) newErrors.address = 'Address is required';
-
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = 'Passwords do not match';
-
     return newErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -55,19 +52,19 @@ const Registration = () => {
     }
 
     alert('Registration successful!');
-    setFormData({
-      name: '', email: '', phone: '', address: '',
-      password: '', confirmPassword: ''
-    });
+    setFormData({ name: '', email: '', phone: '', address: '', password: '', confirmPassword: '' });
     setErrors({});
+    navigate('/'); // Go to Home after registration
   };
 
   return (
     <div className={styles['registration-page']}>
-      <div className="container mt-5" style={{ maxWidth: '400px' }}>
-        <h2>Register</h2>
+      <div className={styles.container}>
+        <h2 className="text-center mb-4">Register</h2>
+
+       
+
         <form onSubmit={handleSubmit} noValidate>
-          {/* Name */}
           <div className="mb-3">
             <label className="form-label">Name</label>
             <input
@@ -80,7 +77,6 @@ const Registration = () => {
             {errors.name && <div className="invalid-feedback">{errors.name}</div>}
           </div>
 
-          {/* Email */}
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
@@ -92,33 +88,30 @@ const Registration = () => {
             />
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
-          {/* Phone Number */}
-         <div className="mb-3">
-  <label className="form-label">Phone Number</label>
-  <input
-    type="text"
-    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-    name="phone"
-    value={formData.phone}
-    onChange={handleChange}
-  />
-  {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-</div>
 
-          {/* Address */} 
-        <div className="mb-3">
-      <label className="form-label">Address</label>
-    <textarea
-    className={`form-control ${errors.address ? 'is-invalid' : ''}`}
-    name="address"
-    value={formData.address}
-    onChange={handleChange}
-  />
-  {errors.address && <div className="invalid-feedback">{errors.address}</div>}
-</div>
+          <div className="mb-3">
+            <label className="form-label">Phone Number</label>
+            <input
+              type="text"
+              className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+            {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
+          </div>
 
+          <div className="mb-3">
+            <label className="form-label">Address</label>
+            <textarea
+              className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            {errors.address && <div className="invalid-feedback">{errors.address}</div>}
+          </div>
 
-          {/* Password */}
           <div className="mb-3">
             <label className="form-label">Password</label>
             <input
@@ -131,7 +124,6 @@ const Registration = () => {
             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
 
-          {/* Confirm Password */}
           <div className="mb-3">
             <label className="form-label">Confirm Password</label>
             <input
@@ -144,7 +136,7 @@ const Registration = () => {
             {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
           </div>
 
-          <button type="submit" className="btn btn-success w-100">Register</button>
+          <button type="submit" className="btn btn-success w-100 mt-2">Register</button>
         </form>
       </div>
     </div>
