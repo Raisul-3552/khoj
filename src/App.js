@@ -13,7 +13,8 @@
   import Navbar from './component/Navbar';
   import Home from './component/Home';
   import About from './component/About';
-  import Registration from './component/Registration'; 
+  import Registration from './component/Registration';
+  import Report from './component/Report'; 
 
   function App() {
     return (
@@ -25,6 +26,7 @@
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
+            <Route path="/report" element={<Report />} />
           </Routes>
         </div>
       </Router>
