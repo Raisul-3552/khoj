@@ -1,5 +1,5 @@
   import React from 'react';
-
+import Registration from './component/Registration';
   import 'bootstrap/dist/css/bootstrap.min.css';
   import 'bootstrap/dist/js/bootstrap.bundle.min.js';
   
@@ -24,7 +24,7 @@
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
-            
+            <Route path="/register" element={<Registration />} />
           </Routes>
         </div>
       </Router>
