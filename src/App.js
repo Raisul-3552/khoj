@@ -13,7 +13,12 @@ import Registration from './component/Registration';
   import Navbar from './component/Navbar';
   import Home from './component/Home';
   import About from './component/About';
+<<<<<<< HEAD
   
+=======
+  import Registration from './component/Registration'; 
+  import Report from './component/Report'; 
+>>>>>>> f45736b30cc3925be99077c2c8b168849d8bd398
 
   function App() {
     return (
@@ -25,6 +30,9 @@ import Registration from './component/Registration';
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/report" element={<Report />} />
+
           </Routes>
         </div>
       </Router>
