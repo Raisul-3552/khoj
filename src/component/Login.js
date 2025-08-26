@@ -1,27 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from '../css/Login.module.css'; // Optional: Create this CSS module for custom styling
+import styles from '../css/Login.module.css';
+import logoKhoj from '../assets/logo/logo_khoj2.png'; // Correct relative path
 
 const Login = () => {
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
 
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const validate = () => {
     const newErrors = {};
-
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -37,7 +30,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -47,13 +39,17 @@ const Login = () => {
     alert('Login successful!');
     setFormData({ email: '', password: '' });
     setErrors({});
-    navigate('/'); // Redirect to home after login
+    navigate('/');
   };
 
   return (
-    <div className={styles['login-page']}> {/* Optional CSS class */}
+    <div className={styles['login-page']}>
       <div className={styles['login-box']}>
-        <h2>Login</h2>
+        <div className={styles['header']}>
+          <img src={logoKhoj} alt="Khoj Logo" className={styles['logo']} />
+          <h2>Welcome Back</h2>
+          <p className={styles['subtitle']}>Please sign in to continue</p>
+        </div>
         <form onSubmit={handleSubmit} noValidate>
           <div className="mb-3">
             <label className="form-label">Email</label>
@@ -81,6 +77,11 @@ const Login = () => {
 
           <button type="submit" className="btn btn-primary w-100">Log In</button>
         </form>
+
+        <div className={styles['footer']}>
+          <p><a href="/forgot-password">Forgot Password?</a></p>
+          <p>Need help? <a href="/contact">Contact Support</a></p>
+        </div>
       </div>
     </div>
   );
