@@ -29,7 +29,7 @@ const SidebarNavbar = () => {
           <nav className="nav flex-column">
             <Link className="nav-link" to="/">🏠 Home</Link>
             <Link className="nav-link" to="/about">ℹ️ About</Link>
-            <Link className="nav-link" to="/help">📞 Contact / Help</Link>
+            <Link className="nav-link" to="/help">📞 Support</Link>
             <hr />
             <Link className="nav-link" to="/register">📝 Register</Link>
             <Link className="nav-link" to="/login">🔑 Login</Link>

@@ -23,14 +23,14 @@
 }
 
 .logo {
-  height: 100px;              /* bigger logo */
+  height: 100px;
   object-fit: contain;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .logo:hover {
-  transform: scale(1.08);    /* slight zoom on hover */
-  filter: drop-shadow(0 0 6px #0ff); /* glowing effect */
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px #00eaff);
 }
 
 /* Body spacing */
@@ -47,17 +47,23 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border-radius: 6px;
-  transition: background-color 0.25s ease, color 0.25s ease, transform 0.05s ease;
+  transition: 
+    background-color 0.25s ease, 
+    color 0.25s ease, 
+    transform 0.15s ease, 
+    text-shadow 0.25s ease, 
+    background 0.4s ease;
   text-decoration: none;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.2);
 }
 
+/* Hover effect: gradient + glow + slight zoom */
 .sidebar .nav-link:hover {
-  background-color: #203a43;
-  color: #0ff;
-}
-
-.sidebar .nav-link:active {
-  transform: translateY(1px);
+  background: linear-gradient(90deg, #00eaff, #8a2be2);
+  color: transparent;
+  -webkit-background-clip: text;
+  transform: scale(1.05);
+  text-shadow: 0 0 8px #00eaff, 0 0 15px #8a2be2;
 }
 
 /* Active route styling */
@@ -65,6 +71,8 @@
   background-color: #17313a;
   color: #8ff;
   font-weight: 700;
+  text-shadow: 0 0 10px #0ff;
+  transform: scale(1.02);
 }
 
 /* Divider */
@@ -109,5 +117,40 @@
 @media (max-width: 420px) {
   .sidebar {
     --bs-offcanvas-width: 220px;
+  }
+}
+
+/* ✨ Extra text effects */
+
+/* Gradient text (optional for headings/logos if text is used instead of img) */
+.gradientText {
+  background: linear-gradient(90deg, #00eaff, #8a2be2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Optional shimmer animation for special attention links */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  100% {
+    left: 125%;
   }
 }
