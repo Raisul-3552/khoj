@@ -9,7 +9,7 @@ import Login from './component/Login';
 import Navbar from './component/Navbar';
 import Home from './component/Home';
 import About from './component/About';
-
+import Report from './component/Report';
 function App() {
   return (
     <Router>
@@ -20,6 +20,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
       </div>
     </Router>
