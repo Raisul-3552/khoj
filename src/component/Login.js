@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/Login.module.css';
-import logoKhoj from '../assets/logo/logo_khoj.png';
+import logoKhoj from '../assets/logo/logo_khoj2.png';
 
 
 const Login = () => {
