@@ -21,6 +21,7 @@ function Report() {
     });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
@@ -77,6 +78,7 @@ function Report() {
             />
           </div>
         </div>
+        
 
        
         <div className="form-row">
