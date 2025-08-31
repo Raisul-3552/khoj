@@ -1,0 +1,120 @@
+.container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+
+.leftSide {
+  flex: 2;
+  background-color: #bdc39f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px;
+}
+
+.logo {
+  max-width: 400px;
+  width: 80%;
+  height: auto;
+  margin-bottom: 30px;
+}
+
+.motto {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1976d2;
+}
+
+.tagline {
+  font-size: 18px;
+  color: #555;
+  max-width: 400px;
+}
+
+.rightSide {
+  flex: 1;
+  background-color: #d7d4a7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.card {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.cardTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.cardSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.loginBtn {
+  padding: 12px 25px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.loginBtn:hover {
+  background-color: #1565c0;
+}
+
+.registerBtn {
+  padding: 12px 25px;
+  background-color: #43a047;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.registerBtn:hover {
+  background-color: #2e7d32;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+  .leftSide, .rightSide {
+    flex: unset;
+    width: 100%;
+    padding: 30px;
+  }
+  .logo {
+    max-width: 250px;
+    margin-bottom: 20px;
+  }
+}
