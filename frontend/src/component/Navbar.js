@@ -1,41 +1,37 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styles from '../css/Navbar.module.css';
 
 const Navbar = () => {
   return (
-    <nav className={`navbar navbar-expand-lg ${styles.navbarCustom}`}>
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">Khoj</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link active" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/about">About</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/report">Report</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/profile">Profile</Link> 
-            </li>
-          </ul>
-        </div>
+    <nav className={styles.navbar}>
+      <div className={styles.brand}>
+        <Link to="/">Khoj</Link>
       </div>
+      <ul className={styles.navLinks}>
+        <li>
+          <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ''}>
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/report" className={({ isActive }) => isActive ? styles.active : ''}>
+            Report
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/profile" className={({ isActive }) => isActive ? styles.active : ''}>
+            Profile
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/about" className={({ isActive }) => isActive ? styles.active : ''}>
+            About
+          </NavLink>
+        </li>
+      </ul>
     </nav>
   );
 };
-
 
 export default Navbar;

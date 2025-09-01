@@ -23,4 +23,3 @@ backend/coverage/
 backend/dist/
 backend/.env
 
-# Note: DO NOT ignore backend/.env.example (keep it in Git)

@@ -1,3 +1,38 @@
-.navbarCustom {
-  background-color: #4a90e2 !important;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #45bbbb; 
+  padding: 10px 20px;
+}
+
+.brand a {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.navLinks li a {
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navLinks li a:hover {
+  color: #cce0ff;
+}
+
+.active {
+  font-weight: bold;
+  text-decoration: underline;
 }

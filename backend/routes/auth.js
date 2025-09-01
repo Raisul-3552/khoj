@@ -1,13 +1,13 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../model/User.js';  // ✅ Ensure the folder name is "model" not "models"
+import User from '../model/User.js';   
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = express.Router();
 
-// ==================== REGISTER ====================
+//                                register
 router.post('/register', async (req, res) => {
   const { name, email, password, phone, address } = req.body;
 
@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ==================== LOGIN ====================
+//                    login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ==================== JWT VERIFY MIDDLEWARE ====================
+//                     jwt middileware verification
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader?.split(' ')[1];
@@ -94,7 +94,7 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// ==================== GET PROFILE ====================
+                            //update token
 router.get('/profile', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -106,7 +106,7 @@ router.get('/profile', verifyToken, async (req, res) => {
   }
 });
 
-// ==================== UPDATE PROFILE ====================
+//                          profile
 router.put('/profile', verifyToken, async (req, res) => {
   const { name, phone, address } = req.body;
 
@@ -136,4 +136,35 @@ router.put('/profile', verifyToken, async (req, res) => {
   }
 });
 
+//                  get all users
+router.get('/all', async (req, res) => {
+  try {
+    const users = await User.find().select('-password'); // exclude passwords
+    res.json({ users });
+  } catch (err) {
+    console.error('Get all users error:', err);
+    res.status(500).json({ message: err.message || 'Server error' });
+  }
+});
+
+//                      delete a user
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error('Delete user error:', err);
+    res.status(500).json({ message: err.message || 'Server error' });
+  }
+});
+
 export default router;
+
+
+
+
+
+//postman -> post ->http://localhost:5000/api/auth/register
+// postman -> get -> http://localhost:5000/api/auth/all
