@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "../css/Profile.css"; // Make sure you create this CSS file
+import styles from "../css/Profile.css"; 
 
-const API_URL = "http://localhost:5000/api/auth"; // Your backend auth URL
+const API_URL = "http://localhost:5000/api/auth"; 
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -15,20 +15,20 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-      if (!token) return navigate("/"); // Redirect to home if not logged in
+      if (!token) return navigate("/"); 
 
       try {
         const res = await axios.get(`${API_URL}/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(res.data.user || res.data); // Depending on backend response
+        setUser(res.data.user || res.data); 
         setFormData({
           name: res.data.user?.name || res.data.name,
           phone: res.data.user?.phone || res.data.phone,
           address: res.data.user?.address || res.data.address,
         });
       } catch {
-        navigate("/"); // Redirect to home if error
+        navigate("/"); 
       }
     };
     fetchProfile();
@@ -50,8 +50,8 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear token
-    navigate("/"); // Redirect to home page
+    localStorage.removeItem("token"); 
+    navigate("/");
   };
 
   if (!user) return <p>Loading...</p>;
