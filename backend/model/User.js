@@ -3,11 +3,17 @@ import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema({
   name: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: [2, "Name must be at least 2 characters"],
+  type: String,
+  required: true,
+  trim: true,
+  minlength: [2, "Name must be at least 2 characters"],
+  validate: {
+    validator: function (value) {
+      return value.trim().length > 0; 
+    },
+    message: "Name cannot be only spaces",
   },
+},
   email: {
     type: String,
     required: true,
@@ -31,16 +37,23 @@ const UserSchema = new mongoose.Schema({
     },
   },
   address: {
-    type: String,
-    required: true,
+  type: String,
+  required: true,
+  trim: true,
+  minlength: [5, "Address must be at least 5 characters"],
+  validate: {
+    validator: function (value) {
+      return value.trim().length > 0;  
+    },
+    message: "Address cannot be empty or spaces only",
   },
+},
   password: {
   type: String,
   required: true,
-  minlength: 6, // at least 6 characters
+  minlength: 6, 
   validate: {
     validator: function (value) {
-      // must have at least one lowercase and one uppercase
       return /[a-z]/.test(value) && /[A-Z]/.test(value);
     },
     message: "Password must have at least 1 uppercase and 1 lowercase letter",
