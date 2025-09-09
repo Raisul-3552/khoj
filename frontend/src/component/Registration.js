@@ -15,19 +15,36 @@ const Registration = () => {
     confirmPassword: "",
     profilePic: null,
   });
-
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) =>
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "phone") {
+      if (!/^\d*$/.test(value)) return;
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[name];
+      return newErrors;
+    });
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFormData((prev) => ({ ...prev, profilePic: file }));
       setPreview(URL.createObjectURL(file));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.profilePic;
+        return newErrors;
+      });
     } else {
       setFormData((prev) => ({ ...prev, profilePic: null }));
       setPreview(null);
@@ -38,16 +55,16 @@ const Registration = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    )
+      newErrors.email = "Invalid email";
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.password) newErrors.password = "Password is required";
-    if (formData.password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    if (!/[A-Z]/.test(formData.password) || !/[a-z]/.test(formData.password))
-      newErrors.password =
-        "Password must have at least 1 uppercase and 1 lowercase letter";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
+    if (!formData.profilePic) newErrors.profilePic = "Profile image is required";
     return newErrors;
   };
 
@@ -65,24 +82,22 @@ const Registration = () => {
       data.append("phone", formData.phone);
       data.append("address", formData.address);
       data.append("password", formData.password);
-      if (formData.profilePic) data.append("profilePic", formData.profilePic);
+      data.append("profilePic", formData.profilePic);
 
       const res = await fetch(`${API_URL}/register`, {
         method: "POST",
         body: data,
       });
 
-      const result = await res.json();
-      if (res.ok) {
-        navigate("/login");
-      } else {
-        setErrors({ general: result.message || "Registration failed" });
-      }
-    } catch (err) {
-      setErrors({ general: "Server error" });
-    }
+      if (res.ok) navigate("/login");
+    } catch (err) {}
     setLoading(false);
   };
+
+  const password = formData.password;
+  const showUpper = !/[A-Z]/.test(password);
+  const showLower = !/[a-z]/.test(password);
+  const showLength = password.length < 6;
 
   return (
     <div className={styles.registrationPage}>
@@ -151,9 +166,11 @@ const Registration = () => {
               onChange={handleChange}
               className={errors.password ? styles.invalid : ""}
             />
-            {errors.password && (
-              <div className={styles.error}>{errors.password}</div>
-            )}
+            <div className={styles.error}>
+              {showUpper && <div>• Minimum 1 uppercase letter required</div>}
+              {showLower && <div>• Minimum 1 lowercase letter required</div>}
+              {showLength && <div>• Minimum length 6 required</div>}
+            </div>
           </div>
 
           <div className={styles.formGroup}>
@@ -172,19 +189,14 @@ const Registration = () => {
 
           <div className={styles.formGroup}>
             <label>Profile Picture</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+            {errors.profilePic && (
+              <div className={styles.error}>{errors.profilePic}</div>
+            )}
             {preview && (
               <img src={preview} alt="preview" className={styles.preview} />
             )}
           </div>
-
-          {errors.general && (
-            <div className={styles.error}>{errors.general}</div>
-          )}
 
           <button type="submit" className={styles.btn} disabled={loading}>
             {loading ? "Registering..." : "Register"}

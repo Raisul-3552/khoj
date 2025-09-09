@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../css/Report.css';
 
 function Report() {
@@ -15,6 +16,14 @@ function Report() {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -29,9 +38,14 @@ function Report() {
     setLoading(true);
     setMessage('');
 
+    if (!formData.image) {
+      setLoading(false);
+      setMessage('Please upload a picture of the item to complete the report.');
+      return;
+    }
+
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Please login first');
       setLoading(false);
       return;
     }
@@ -44,9 +58,7 @@ function Report() {
     data.append('location', formData.location);
     data.append('status', formData.status);
     data.append('contact', formData.contact);
-    if (formData.image) {
-      data.append('image', formData.image);
-    }
+    data.append('image', formData.image);
 
     try {
       await axios.post('http://localhost:5000/api/report', data, {
@@ -55,9 +67,7 @@ function Report() {
           'Content-Type': 'multipart/form-data',
         },
       });
-
       setMessage('Report submitted successfully!');
-      // Reset form
       setFormData({
         itemName: '',
         category: 'Electronics',
@@ -68,11 +78,8 @@ function Report() {
         contact: '',
         image: null,
       });
-      
-      // Clear file input
       const fileInput = document.querySelector('input[type="file"]');
       if (fileInput) fileInput.value = '';
-
     } catch (error) {
       console.error('Error submitting report:', error);
       setMessage(error.response?.data?.message || 'Failed to submit report');
@@ -191,12 +198,13 @@ function Report() {
 
         <div className="form-row">
           <div className="form-group full-width">
-            <label>Upload Image (if available)</label>
+            <label>Upload Image <span style={{color: "red"}}>(required)</span></label>
             <input
               type="file"
               name="image"
               accept="image/*"
               onChange={handleChange}
+              required
             />
           </div>
         </div>

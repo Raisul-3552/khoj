@@ -1,56 +1,106 @@
-.login-page {
+.loginPage {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f6fa;
+  background: linear-gradient(135deg, #87bc4f 10%, #385b83 100%);
+  font-family: "Poppins", sans-serif;
 }
 
-.login-box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
+.loginBox {
+  background: #cbc4b6;
+  padding: 35px;
+  border-radius: 16px;
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+  max-width: 380px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: popUp 0.5s ease-in-out;
+}
+
+@keyframes popUp {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 h2 {
-  text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+  color: #333;
+  font-weight: 600;
 }
 
-.form-group {
-  margin-bottom: 20px;
+label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  color: #444;
 }
 
 input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.invalid {
-  border-color: red;
-}
-
-.error {
-  color: red;
-  margin-top: 5px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   font-size: 14px;
+  outline: none;
+  margin-bottom: 15px;
+  transition: 0.3s;
 }
 
-.btn {
+input:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 6px rgba(37, 117, 252, 0.3);
+}
+
+.is-invalid {
+  border-color: #e74c3c !important;
+}
+
+.invalid-feedback {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+button {
   width: 100%;
   padding: 12px;
-  background-color: #1976d2;
+  background: #2575fc;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.btn:hover {
-  background-color: #1565c0;
+button:hover {
+  background: #6a11cb;
+  transform: translateY(-2px);
+}
+
+.registerLink {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.registerLink a {
+  color: #2575fc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
 }

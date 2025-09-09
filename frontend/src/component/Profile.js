@@ -1,9 +1,9 @@
-// Profile.js (completely redesigned)
+// Profile.js (with email display)
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEdit, FaSave, FaSignOutAlt, FaTimes, FaUser, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-import { MdReportProblem, MdCheckCircle, MdUpload } from "react-icons/md";
+import { MdReportProblem, MdCheckCircle, MdUpload, MdEmail } from "react-icons/md";
 import "../css/Profile.css";
 
 const API_URL = "http://localhost:5000/api/auth";
@@ -21,6 +21,17 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [reportsError, setReportsError] = useState("");
   const [myReports, setMyReports] = useState([]);
+  const [editingReportId, setEditingReportId] = useState(null);
+  const [reportFormData, setReportFormData] = useState({
+    itemName: "",
+    category: "",
+    description: "",
+    dateTime: "",
+    location: "",
+    status: "",
+    contact: "",
+    image: null
+  });
 
   const fetchProfile = useCallback(async () => {
     const token = localStorage.getItem("token");
@@ -74,6 +85,14 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleReportChange = (e) => {
+    setReportFormData({ ...reportFormData, [e.target.name]: e.target.value });
+  };
+
+  const handleReportFileChange = (e) => {
+    setReportFormData({ ...reportFormData, image: e.target.files[0] });
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setProfilePicFile(file);
@@ -117,6 +136,66 @@ const Profile = () => {
     setFormData({ name: user.name, phone: user.phone, address: user.address });
   };
 
+  const handleEditReport = (report) => {
+    setEditingReportId(report._id);
+    setReportFormData({
+      itemName: report.itemName,
+      category: report.category,
+      description: report.description,
+      dateTime: report.dateTime,
+      location: report.location,
+      status: report.status,
+      contact: report.contact,
+      image: null
+    });
+  };
+
+  const handleCancelEditReport = () => {
+    setEditingReportId(null);
+    setReportFormData({
+      itemName: "",
+      category: "",
+      description: "",
+      dateTime: "",
+      location: "",
+      status: "",
+      contact: "",
+      image: null
+    });
+  };
+
+  const handleUpdateReport = async (reportId) => {
+    const token = localStorage.getItem("token");
+    const data = new FormData();
+    data.append("itemName", reportFormData.itemName);
+    data.append("category", reportFormData.category);
+    data.append("description", reportFormData.description);
+    data.append("dateTime", reportFormData.dateTime);
+    data.append("location", reportFormData.location);
+    data.append("status", reportFormData.status);
+    data.append("contact", reportFormData.contact);
+    if (reportFormData.image) data.append("image", reportFormData.image);
+
+    try {
+      const res = await axios.put(`${REPORT_API_URL}/${reportId}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      // Update the report in the local state
+      setMyReports(myReports.map(report => 
+        report._id === reportId ? res.data.report : report
+      ));
+      
+      setEditingReportId(null);
+      setReportsError("");
+    } catch (err) {
+      setReportsError(err.response?.data?.message || "Failed to update report.");
+    }
+  };
+
   const handleDeleteReport = async (reportId) => {
     const token = localStorage.getItem("token");
     if (!window.confirm("Are you sure you want to delete this report?")) return;
@@ -130,10 +209,6 @@ const Profile = () => {
     } catch (err) {
       setReportsError(err.response?.data?.message || "Failed to delete report.");
     }
-  };
-
-  const handleEditReport = (report) => {
-    navigate(`/edit-report/${report._id}`, { state: { report } });
   };
 
   const handleLogout = () => {
@@ -151,7 +226,7 @@ const Profile = () => {
           <div className="profile-header">
             <h2>My Profile</h2>
             <button className="logout-btn" onClick={handleLogout} title="Logout" aria-label="Logout">
-              <FaSignOutAlt /> Logout
+              <FaSignOutAlt />
             </button>
           </div>
           
@@ -215,6 +290,15 @@ const Profile = () => {
                 </div>
               </div>
               
+              {/* Email Field - Display only */}
+              <div className="info-item">
+                <MdEmail />
+                <div>
+                  <span className="info-label">Email</span>
+                  <span className="info-value">{user.email}</span>
+                </div>
+              </div>
+              
               <div className="info-item">
                 <FaPhone />
                 <div>
@@ -253,13 +337,24 @@ const Profile = () => {
           </div>
         ) : (
           <div className="report-grid">
-            {myReports.map((r) => (
-              <ReportCard 
-                key={r._id} 
-                report={r} 
-                onEdit={handleEditReport} 
-                onDelete={handleDeleteReport} 
-              />
+            {myReports.map((report) => (
+              editingReportId === report._id ? (
+                <EditReportCard 
+                  key={report._id}
+                  report={reportFormData}
+                  onChange={handleReportChange}
+                  onFileChange={handleReportFileChange}
+                  onSave={() => handleUpdateReport(report._id)}
+                  onCancel={handleCancelEditReport}
+                />
+              ) : (
+                <ReportCard 
+                  key={report._id} 
+                  report={report} 
+                  onEdit={handleEditReport} 
+                  onDelete={handleDeleteReport} 
+                />
+              )
             ))}
           </div>
         )}
@@ -317,6 +412,123 @@ const ReportCard = ({ report, onEdit, onDelete }) => {
         <button className="btn-danger" onClick={() => onDelete(_id)} title="Delete Report" aria-label={`Delete report for ${itemName}`}>
           <FaTimes /> Delete
         </button>
+      </div>
+    </div>
+  );
+};
+
+const EditReportCard = ({ report, onChange, onFileChange, onSave, onCancel }) => {
+  return (
+    <div className="report-card" style={{borderColor: "var(--primary)"}}>
+      <div className="edit-form">
+        <div className="form-group">
+          <label>Item Name</label>
+          <input
+            type="text"
+            name="itemName"
+            value={report.itemName}
+            onChange={onChange}
+            placeholder="Item Name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Category</label>
+          <input
+            type="text"
+            name="category"
+            value={report.category}
+            onChange={onChange}
+            placeholder="Category"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={report.description}
+            onChange={onChange}
+            placeholder="Description"
+            rows="3"
+            style={{
+              padding: "12px 16px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              fontSize: "16px",
+              fontFamily: "inherit"
+            }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Date & Time</label>
+          <input
+            type="datetime-local"
+            name="dateTime"
+            value={report.dateTime}
+            onChange={onChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Location</label>
+          <input
+            type="text"
+            name="location"
+            value={report.location}
+            onChange={onChange}
+            placeholder="Location"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Status</label>
+          <select
+            name="status"
+            value={report.status}
+            onChange={onChange}
+            style={{
+              padding: "12px 16px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              fontSize: "16px"
+            }}
+          >
+            <option value="">Select Status</option>
+            <option value="Lost">Lost</option>
+            <option value="Found">Found</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Contact</label>
+          <input
+            type="text"
+            name="contact"
+            value={report.contact}
+            onChange={onChange}
+            placeholder="Contact"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Update Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+          />
+        </div>
+
+        <div className="btn-row">
+          <button className="btn-primary" onClick={onSave}>
+            <FaSave /> Save
+          </button>
+          <button className="btn-secondary" onClick={onCancel}>
+            <FaTimes /> Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import styles from "../css/Login.module.css";
 
@@ -9,9 +9,11 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setServerError(""); 
   };
 
   const validate = () => {
@@ -34,7 +36,7 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       navigate("/profile");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      setServerError(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -43,6 +45,8 @@ const Login = () => {
       <div className={styles.loginBox}>
         <h2>Login</h2>
         <form onSubmit={handleSubmit} noValidate>
+          {serverError && <div className={styles.serverError}>{serverError}</div>}
+
           <div className="mb-3">
             <label>Email</label>
             <input
@@ -67,7 +71,11 @@ const Login = () => {
             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">Login</button>
+          <button type="submit">Login</button>
+          
+          <div className={styles.registerLink}>
+            <p>Don't have an account? <Link to="/register">Register</Link></p>
+          </div>
         </form>
       </div>
     </div>

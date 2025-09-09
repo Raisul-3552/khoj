@@ -32,7 +32,7 @@
 
 .tagline {
   font-size: 18px;
-  color: #555;
+  color: #356095;
   max-width: 400px;
 }
 
@@ -91,7 +91,7 @@
 
 .registerBtn {
   padding: 12px 25px;
-  background-color: #43a047;
+  background-color: #2f902a;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -101,7 +101,7 @@
 }
 
 .registerBtn:hover {
-  background-color: #2e7d32;
+  background-color: #4f8d28;
 }
 
 @media (max-width: 900px) {
