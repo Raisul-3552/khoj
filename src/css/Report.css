@@ -73,9 +73,8 @@ textarea {
 }
 
 textarea[name="description"] {
-  min-height: 150px; /* adjust this value to your liking */
+  min-height: 150px;
 }
-
 
 .submit-button {
   width: 100%;
@@ -92,4 +91,14 @@ textarea[name="description"] {
 
 .submit-button:hover {
   background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.error input[type="file"] {
+  border: 1.5px solid red;
 }

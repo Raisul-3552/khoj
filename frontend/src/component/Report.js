@@ -38,6 +38,12 @@ function Report() {
     setLoading(true);
     setMessage('');
 
+    if (!formData.image) {
+      setLoading(false);
+      setMessage('Please upload a picture of the item to complete the report.');
+      return;
+    }
+
     const token = localStorage.getItem('token');
     if (!token) {
       setLoading(false);
@@ -52,7 +58,7 @@ function Report() {
     data.append('location', formData.location);
     data.append('status', formData.status);
     data.append('contact', formData.contact);
-    if (formData.image) data.append('image', formData.image);
+    data.append('image', formData.image);
 
     try {
       await axios.post('http://localhost:5000/api/report', data, {
@@ -192,12 +198,13 @@ function Report() {
 
         <div className="form-row">
           <div className="form-group full-width">
-            <label>Upload Image (if available)</label>
+            <label>Upload Image <span style={{color: "red"}}>(required)</span></label>
             <input
               type="file"
               name="image"
               accept="image/*"
               onChange={handleChange}
+              required
             />
           </div>
         </div>

@@ -13,6 +13,8 @@ function Report() {
     image: null,
   });
 
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
@@ -21,9 +23,15 @@ function Report() {
     });
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.image) {
+      setError("Image is required. Please upload a picture.");
+      return;
+    }
+
+    setError('');
     console.log(formData);
     alert("Report submitted!");
   };
@@ -33,7 +41,6 @@ function Report() {
       <form className="report-card" onSubmit={handleSubmit}>
         <h2 className="form-title">Report Item</h2>
 
-        
         <div className="form-row">
           <div className="form-group">
             <label>Item Name</label>
@@ -64,7 +71,6 @@ function Report() {
           </div>
         </div>
 
-       
         <div className="form-row">
           <div className="form-group full-width">
             <label>Description</label>
@@ -78,9 +84,7 @@ function Report() {
             />
           </div>
         </div>
-        
 
-       
         <div className="form-row">
           <div className="form-group">
             <label>Date & Time</label>
@@ -106,7 +110,6 @@ function Report() {
           </div>
         </div>
 
-       
         <div className="form-row">
           <div className="form-group">
             <label>Status</label>
@@ -135,20 +138,20 @@ function Report() {
           </div>
         </div>
 
-        
         <div className="form-row">
-          <div className="form-group full-width">
-            <label>Upload Image (if available)</label>
+          <div className={`form-group full-width ${error ? 'error' : ''}`}>
+            <label>Upload Image (required)</label>
             <input
               type="file"
               name="image"
               accept="image/*"
               onChange={handleChange}
+              required
             />
+            {error && <p className="error-message">{error}</p>}
           </div>
         </div>
 
-       
         <button type="submit" className="submit-button">
           Report Item
         </button>
