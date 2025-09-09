@@ -1,170 +1,166 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../model/User.js';   
-import dotenv from 'dotenv';
+import express from "express";
+import dotenv from "dotenv";
+import multer from "multer";
+import path from "path";
+import jwt from "jsonwebtoken";
+import User from "../model/User.js";
 
 dotenv.config();
-
 const router = express.Router();
 
-//                                register
-router.post('/register', async (req, res) => {
+// Multer setup for profilePic uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + path.extname(file.originalname)),
+});
+const upload = multer({ storage });
+
+/* ---------------- REGISTER ---------------- */
+router.post("/register", upload.single("profilePic"), async (req, res) => {
+  console.log("Register body:", req.body);
+  console.log("Register file:", req.file);
+
   const { name, email, password, phone, address } = req.body;
 
   if (!name || !email || !password || !phone || !address) {
-    return res.status(400).json({ message: 'All fields are required' });
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return (res.status409).json({ message: "Email already registered" });
     }
 
-    const newUser = new User({ name, email, password, phone, address });
+    const profilePic = req.file ? `/uploads/${req.file.filename}` : "";
+
+    const newUser = new User({
+      name,
+      email,
+      password,
+      phone,
+      address,
+      profilePic,
+    });
+
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        phone: newUser.phone,
-        address: newUser.address,
-      },
-    });
+    res.status(201).json({ message: "Registration successful" });
   } catch (err) {
-    console.error('Registration error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//                    login
-router.post('/login', async (req, res) => {
+/* ---------------- LOGIN ---------------- */
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+    return res.status(400).json({ message: "Email and password required" });
   }
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     res.json({
-      message: 'Login successful',
       token,
       user: {
-        id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
         address: user.address,
+        profilePic: user.profilePic,
       },
     });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//                     jwt middileware verification
+/* ---------------- TOKEN MIDDLEWARE ---------------- */
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Access denied. No token provided.' });
+  const authHeader = req.headers["authorization"];
+  const token = authHeader?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "No token provided" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
+    if (err) return res.status(403).json({ message: "Invalid token" });
     req.user = user;
     next();
   });
 };
 
-                            //update token
-router.get('/profile', verifyToken, async (req, res) => {
+/* ---------------- PROFILE (GET) ---------------- */
+router.get("/profile", verifyToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json({ user });
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
   } catch (err) {
-    console.error('Profile fetch error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//                          profile
-router.put('/profile', verifyToken, async (req, res) => {
+/* ---------------- PROFILE (UPDATE) ---------------- */
+router.put("/profile", verifyToken, upload.single("profilePic"), async (req, res) => {
   const { name, phone, address } = req.body;
-
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (name) user.name = name;
-    if (phone) user.phone = phone;
-    if (address) user.address = address;
+    user.name = name || user.name;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+
+    // Update profilePic if a new file is uploaded
+    if (req.file) {
+      user.profilePic = `/uploads/${req.file.filename}`;
+    }
 
     await user.save();
 
-    res.json({
-      message: 'Profile updated successfully',
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-      },
-    });
+    res.json({ message: "Profile updated", user });
   } catch (err) {
-    console.error('Update profile error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//                  get all users
-router.get('/all', async (req, res) => {
+/* ---------------- DELETE ACCOUNT ---------------- */
+router.delete("/delete", verifyToken, async (req, res) => {
   try {
-    const users = await User.find().select('-password'); // exclude passwords
-    res.json({ users });
+    await User.findByIdAndDelete(req.user.id);
+    res.json({ message: "Account deleted" });
   } catch (err) {
-    console.error('Get all users error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//                      delete a user
-router.delete('/delete/:id', async (req, res) => {
+/* ---------------- ALL USERS (ADMIN USE) ---------------- */
+router.get("/all", async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    res.json({ message: 'User deleted successfully' });
+    const users = await User.find().select("-password");
+    res.json(users);
   } catch (err) {
-    console.error('Delete user error:', err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
 export default router;
-
-
-
-
-
-//postman -> post ->http://localhost:5000/api/auth/register
-// postman -> get -> http://localhost:5000/api/auth/all
+export { verifyToken };

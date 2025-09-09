@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../css/Report.css';
 
 function Report() {
@@ -12,6 +13,8 @@ function Report() {
     contact: '',
     image: null,
   });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -21,11 +24,61 @@ function Report() {
     });
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    alert("Report submitted!");
+    setLoading(true);
+    setMessage('');
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login first');
+      setLoading(false);
+      return;
+    }
+
+    const data = new FormData();
+    data.append('itemName', formData.itemName);
+    data.append('category', formData.category);
+    data.append('description', formData.description);
+    data.append('dateTime', formData.dateTime);
+    data.append('location', formData.location);
+    data.append('status', formData.status);
+    data.append('contact', formData.contact);
+    if (formData.image) {
+      data.append('image', formData.image);
+    }
+
+    try {
+      await axios.post('http://localhost:5000/api/report', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setMessage('Report submitted successfully!');
+      // Reset form
+      setFormData({
+        itemName: '',
+        category: 'Electronics',
+        description: '',
+        dateTime: '',
+        location: '',
+        status: '',
+        contact: '',
+        image: null,
+      });
+      
+      // Clear file input
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) fileInput.value = '';
+
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      setMessage(error.response?.data?.message || 'Failed to submit report');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,7 +86,12 @@ function Report() {
       <form className="report-card" onSubmit={handleSubmit}>
         <h2 className="form-title">Report Item</h2>
 
-        
+        {message && (
+          <div className={`message ${message.includes('success') ? 'success' : 'error'}`}>
+            {message}
+          </div>
+        )}
+
         <div className="form-row">
           <div className="form-group">
             <label>Item Name</label>
@@ -64,7 +122,6 @@ function Report() {
           </div>
         </div>
 
-       
         <div className="form-row">
           <div className="form-group full-width">
             <label>Description</label>
@@ -78,9 +135,7 @@ function Report() {
             />
           </div>
         </div>
-        
 
-       
         <div className="form-row">
           <div className="form-group">
             <label>Date & Time</label>
@@ -106,7 +161,6 @@ function Report() {
           </div>
         </div>
 
-       
         <div className="form-row">
           <div className="form-group">
             <label>Status</label>
@@ -135,7 +189,6 @@ function Report() {
           </div>
         </div>
 
-        
         <div className="form-row">
           <div className="form-group full-width">
             <label>Upload Image (if available)</label>
@@ -148,9 +201,12 @@ function Report() {
           </div>
         </div>
 
-       
-        <button type="submit" className="submit-button">
-          Report Item
+        <button 
+          type="submit" 
+          className="submit-button"
+          disabled={loading}
+        >
+          {loading ? 'Submitting...' : 'Report Item'}
         </button>
       </form>
     </div>

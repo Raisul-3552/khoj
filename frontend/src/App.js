@@ -7,7 +7,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  //useNavigate
 } from "react-router-dom";
 
 import Login from './component/Login'; 
@@ -17,7 +16,7 @@ import About from './component/About';
 import Registration from './component/Registration'; 
 import Report from './component/Report';
 import Profile from './component/Profile'; 
- 
+import AllReports from './component/AllReports';
 
 function App() {
   return (
@@ -31,12 +30,11 @@ function App() {
           <Route path="/register" element={<Registration />} />
           <Route path="/report" element={<Report />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/allreports" element={<AllReports />} /> {/* <-- Add this line */}
         </Routes>
       </div>
     </Router>
   );
 }
-
-
 
 export default App;
